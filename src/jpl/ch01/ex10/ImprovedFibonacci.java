@@ -1,6 +1,6 @@
 package jpl.ch01.ex10;
 
-public class ImprovedFibonacci {
+class ImprovedFibonacci {
 	static final int MAX_INDEX = 9;
 	public static void main(String[] args){
 		int lo = 1;
@@ -21,7 +21,7 @@ public class ImprovedFibonacci {
 			lo = hi - lo;
 		}
 		for(int i = 0;i < MAX_INDEX; i++){
-			System.out.println(fibary[i].number+" "+fibary[i].EvenString());
+			System.out.println(i + fibary[i].number+" "+fibary[i].EvenString());
 		}
 	}
 }
