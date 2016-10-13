@@ -2,6 +2,7 @@ package jpl.ch01.ex16;
 
 import java.io.IOException;
 
+@SuppressWarnings("serial")
 class BadDataSetException extends Exception {
     private String file;
     private Exception e;
