@@ -4,6 +4,16 @@ class Point {
 	public double x,y;
 	public static Point origin = new Point();
 
+	public Point() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+	
+	public Point(double x, double y){
+		this.x = x;
+		this.y = y;
+	}
+	
+
 	public void clear(){
 		this.x = 0.0;
 		this.y = 0.0;
