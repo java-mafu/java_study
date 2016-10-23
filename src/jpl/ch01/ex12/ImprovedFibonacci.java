@@ -1,7 +1,6 @@
 package jpl.ch01.ex12;
 
 class ImprovedFibonacci {
-	private ImprovedFibonacci(){}
 	static final int MAX_INDEX = 9;
 	static String[] fibarystr = new String[MAX_INDEX];
 	public static void main(String[] args){
