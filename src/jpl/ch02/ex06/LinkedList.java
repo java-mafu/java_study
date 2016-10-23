@@ -7,11 +7,17 @@ class LinkedList {
 
 	public static void main(String args[]){
 		Vehicle car1 = new Vehicle();
-		Vehicle car2 = new Vehicle();
-		Vehicle car3 = new Vehicle();
+		LinkedList c1 = new LinkedList();
+		c1.list = car1;
 
-		car1.ID = Vehicle.nextID++;
-		car2.ID = Vehicle.nextID++;
-		car3.ID = Vehicle.nextID++;
+		Vehicle car2 = new Vehicle();
+		LinkedList c2 = new LinkedList();
+		c2.list = car2;
+		c2.nextlink = c1;
+
+		Vehicle car3 = new Vehicle();
+		LinkedList c3 = new LinkedList();
+		c3.list = car3;
+		c3.nextlink = c2;
 	}
 }

@@ -1,4 +1,4 @@
-package jpl.ch02.ex05;
+package jpl.ch02.ex07;
 
 public class Vehicle {
 	public int speed;
@@ -7,6 +7,13 @@ public class Vehicle {
 	public static int nextID = 0;
 	public int ID;
 
+	public Vehicle(){
+		ID = ++nextID;
+	}
+	public Vehicle(String name){
+		this();
+		this.name = name;
+	}
 	public void printVehicle(){
 		System.out.println("name:" + name);
 		System.out.println("speed:" + speed);
@@ -15,28 +22,21 @@ public class Vehicle {
 	}
 
 	public static void main(String args[]){
-		Vehicle sedan = new Vehicle();
-		Vehicle sports_car = new Vehicle();
-		Vehicle truck = new Vehicle();
+		Vehicle sedan = new Vehicle("tanama");
+		Vehicle sports_car = new Vehicle("nakata");
+		Vehicle truck = new Vehicle("tamana");
 
 		sedan.speed = 10;
 		sedan.angle = 20;
-		sedan.name = "tanama";
-		sedan.ID = 1;
 		sedan.printVehicle();
 
 		sports_car.speed = 40;
 		sports_car.angle = 15;
-		sports_car.name = "nakata";
-		sports_car.ID = 2;
 		sports_car.printVehicle();
 
 		truck.speed = 5;
 		truck.angle = 90;
-		truck.name = "tamana";
-		truck.ID = 3;
 		truck.printVehicle();
-
 	}
 
 }
