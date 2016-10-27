@@ -1,4 +1,4 @@
-package jpl.ch02.ex10;
+package jpl.ch02.ex12;
 
 public class Vehicle {
 	public int speed;
@@ -20,7 +20,7 @@ public class Vehicle {
 	}
 
 	public String toString() {
-		String desc = "ID " + ID + " ( " + name + ")";
+		String desc = ID + " ( " + name + ")";
 		desc += " speed " + speed;
 		desc += " angle " + angle;
 		return desc;
