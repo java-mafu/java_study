@@ -16,7 +16,7 @@ public class Vehicle {
 	}
 
 	static public int maxID(){
-		return nextID;
+		return nextID-1;
 	}
 	public void printVehicle(){
 		System.out.println("name:" + name);
