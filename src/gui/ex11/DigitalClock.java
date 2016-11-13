@@ -36,7 +36,10 @@ public class DigitalClock extends Frame implements Runnable{
         }
     }
     public void paint(Graphics g) {
-    	NumberData.drawNumberGraphics(g, h);
+    	drawClock(g);
+    }
+	private void drawClock(Graphics g) {
+		NumberData.drawNumberGraphics(g, h);
     	g.fillPolygon(tempsegColonHigh[0],tempsegColonHigh[1],4);
     	g.fillPolygon(tempsegColonLow[0],tempsegColonLow[1],4);
 		g.translate(MAGNI*3,0);
@@ -45,7 +48,7 @@ public class DigitalClock extends Frame implements Runnable{
     	g.fillPolygon(tempsegColonLow[0],tempsegColonLow[1],4);
 		g.translate(MAGNI*3,0);
     	NumberData.drawNumberGraphics(g, s);
-    }
+	}
 
 class MyWindowAdapter extends WindowAdapter {
     public void windowClosing(WindowEvent e) {

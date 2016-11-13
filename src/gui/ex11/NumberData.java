@@ -5,6 +5,7 @@ import static gui.ex11.NumberSeg.*;
 import java.awt.Graphics;
 public class NumberData {
 
+	
 	public static void drawNumberGraphics(Graphics g, int number){
 		if(number >= 100 || number < 0){
 			throw new IllegalArgumentException
