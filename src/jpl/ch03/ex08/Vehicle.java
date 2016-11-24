@@ -1,6 +1,6 @@
-package jpl.ch03.ex06;
+package jpl.ch03.ex08;
 
-public class Vehicle {
+public class Vehicle implements Cloneable{
 	private int speed;
 	private int angle;
 	private String name;
@@ -8,19 +8,15 @@ public class Vehicle {
 	private int ID;
 	public static final boolean TURN_RIGHT = true;
 	public static final boolean TURN_LEFT = false;
-	EnergySource energy;
-
 	public Vehicle(){
 		ID = ++nextID;
-		energy = new GasTank();
-		start(energy);
 	}
 	public Vehicle(String name){
 		this();
 		this.name = name;
 	}
 
-	static public final int maxID(){
+	static public int maxID(){
 		return nextID;
 	}
 
@@ -31,19 +27,19 @@ public class Vehicle {
 		return desc;
 	}
 
-	public final int getSpeed(){
+	public int getSpeed(){
 		return speed;
 	}
 
-	public final void setSpeed(int speed){
+	public void setSpeed(int speed){
 		this.speed = speed;
 	}
 
-	public final int getAngle(){
+	public int getAngle(){
 		return angle;
 	}
 
-	public final void setAngle(int angle){
+	public void setAngle(int angle){
 		this.angle = angle;
 	}
 
@@ -51,26 +47,20 @@ public class Vehicle {
 		return name;
 	}
 
-	public final void setName(String name){
+	public void setName(String name){
 		this.name = name;
 	}
 
-	public final int getNextID(){
+	public int getNextID(){
 		return nextID;
 	}
 
-	public final int getID(){
+	public int getID(){
 		return ID;
 	}
 
 	public void changeSpeed(int speed){
 		this.speed = speed;
-	}
-
-	public void start(EnergySource energy){
-		if(energy.empty()){
-			System.out.println("Empty !");
-		}
 	}
 
 	public void stop(){
@@ -88,6 +78,21 @@ public class Vehicle {
 			this.angle -= 90;
 	}
 
+	/*Cloneableインターフェースの作成*/
+	/*複製に関しては，選択し１のcloneをサポートする方法でよい．
+	 * ただし，速さや向きなどの数値は良いが，
+	 * 所有者の参照を渡すと，コピー前とコピー後の所有者の両方が
+	 * 変更される．（たぶん）
+	 * そのため，cloneのオーバーライドでString型だけ深いコピーを行う*/
+	public Vehicle clone(){
+		try {
+			Vehicle obj = (Vehicle) super.clone();
+			obj.name = this.name;
+			return obj;
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError(e.toString());
+		}
+	}
 
 
 	public static void main(String args[]){

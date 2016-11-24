@@ -17,4 +17,9 @@ class Battery extends EnergySource {
 		return false;
 	}
 
+	@Override
+	 void supply(int addenergy){
+		setbatteryamount(batteryamount + addenergy);
+	}
+
 }

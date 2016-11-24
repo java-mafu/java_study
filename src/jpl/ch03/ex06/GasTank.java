@@ -17,5 +17,9 @@ class GasTank extends EnergySource {
 			return true;
 		return false;
 	}
+	@Override
+	 void supply(int addenergy){
+		setGasamount(gasamount + addenergy);
+	}
 
 }
