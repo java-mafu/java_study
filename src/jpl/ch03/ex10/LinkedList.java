@@ -1,7 +1,7 @@
 package jpl.ch03.ex10;
-import jpl.ch02.ex10.Vehicle;
+import jpl.ch03.ex08.Vehicle;
 
-class LinkedList {
+class LinkedList implements Cloneable{
 	private Object list;
 	private LinkedList nextlink;
 	static private int num = 0;
@@ -50,6 +50,16 @@ class LinkedList {
 			num = 0;
 		}
 		return totalnum;
+	}
+
+	public LinkedList clone(){
+		try {
+			LinkedList obj = (LinkedList) super.clone();
+			obj.list = this.list;
+			return obj;
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError(e.toString());
+		}
 	}
 
 	public static void main(String args[]){
