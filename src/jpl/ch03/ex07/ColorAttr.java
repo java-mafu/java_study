@@ -40,13 +40,28 @@ public class ColorAttr extends Attr {
 			myColor = new ScreenColor(getValue());
 	}
 
-	/*equalsをオーバーライド*/
-	public boolean equals(ColorAttr obj) {
-		return super.equals(obj);
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + super.getName().hashCode();
+		return result;
 	}
 
-	/*hashCodeをオーバーライド*/
-	public int hashCode(){
-		return super.hashCode();
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ColorAttr other = (ColorAttr) obj;
+		if (myColor == null) {
+			if (other.myColor != null)
+				return false;
+		} else if (!myColor.equals(other.myColor))
+			return false;
+		return true;
 	}
 }

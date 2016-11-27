@@ -48,6 +48,7 @@ class PassengerVehicle extends Vehicle implements Cloneable{
 	/*複製に関しては，選択肢１のcloneをサポートする方法でよい．*/
 	public PassengerVehicle clone(){
 		try {
+
 			return (PassengerVehicle) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError(e.toString());
