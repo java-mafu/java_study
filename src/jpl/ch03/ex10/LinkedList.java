@@ -56,6 +56,7 @@ class LinkedList implements Cloneable{
 		try {
 			LinkedList obj = (LinkedList) super.clone();
 			obj.list = this.list;
+
 			return obj;
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError(e.toString());
