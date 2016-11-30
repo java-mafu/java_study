@@ -12,7 +12,7 @@ public enum TrafficLight {
 		nowLight = color;
 	}
 
-	public static Color getColor(TrafficLight light){
-		return light.nowLight;
+	public Color getColor(){
+		return nowLight;
 	}
 }

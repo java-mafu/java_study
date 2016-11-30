@@ -1,10 +1,12 @@
-package jpl.ch06.ex04;
+package jpl.ch06.ex05;
 
 import static org.junit.Assert.*;
 
 import java.awt.Color;
 
 import org.junit.Test;
+
+import jpl.ch06.ex04.TrafficLight;
 
 public class TrafficLightTest {
 
