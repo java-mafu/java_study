@@ -5,7 +5,7 @@ import jpl.ch04.ex01.Vehicle;
 class LinkedListMethod implements LinkedList {
 	Object list;
 	LinkedList nextlink;
-	int num = 0;
+	static int num = 0;
 
 	LinkedListMethod(){
 		this.list = null;
