@@ -40,8 +40,8 @@ class PassengerVehicle extends Vehicle {
 		return passengernum;
 	}
 
-	public int setPassengernum(){
-		return passengernum;
+	public void setPassengernum(int passenger){
+		passengernum = passenger;
 	}
 
 	public static void main(String[] args) {
