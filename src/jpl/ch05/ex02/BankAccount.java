@@ -6,6 +6,18 @@ public class BankAccount {
 	private Action lastAct;
 	private History history = new History();
 
+	public long getNumber(){
+		return number;
+	}
+
+	public long getBalace(){
+		return balance;
+	}
+
+	public Action getAct(){
+		return lastAct;
+	}
+
 	public class Action {
 		private String act;
 		private long amount;
@@ -13,10 +25,20 @@ public class BankAccount {
 			this.act = act;
 			this.amount = amount;
 		}
-		Action(long number, String act, long amount) {
+		Action(long num, String act, long amount) {
+			number = num;
 			this.act = act;
 			this.amount = amount;
 		}
+
+		String getAct(){
+			return act;
+		}
+
+		long getAmount(){
+			return amount;
+		}
+
 		public String toString() {
 			return number + ": " + act + " " + amount;
 		}
