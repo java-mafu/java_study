@@ -23,7 +23,7 @@ class LoopCountBenchmark extends Benchmark {
 	}
 
 	public static void main(String[] args) {
-		int loopcount = 10000;
+		int loopcount = 100000;
 		long time = new LoopCountBenchmark().loopCount(loopcount);
 		System.out.println(loopcount + " methods in " +
 									time + "nanosecond");
