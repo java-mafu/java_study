@@ -1,9 +1,9 @@
 package gui.ex11;
 
 public class NumberSeg {
-	static final int BASEX = 50;//時計を記述する最初の座標x
-	static final int BASEY = 50;//時計を記述する最初の座標y
-	public static final int MAGNI = 5;//数字の倍率を設定する
+	static final int BASEX = 0;//時計を記述する最初の座標x
+	static final int BASEY = 0;//時計を記述する最初の座標y
+	public static int MAGNI = 5;//数字の倍率を設定する
 
 	public final static int tempsega[][]
 			= {{1*MAGNI+BASEX,2*MAGNI+BASEX,10*MAGNI+BASEX,11*MAGNI+BASEX,10*MAGNI+BASEX,2*MAGNI+BASEX,1*MAGNI+BASEX},
