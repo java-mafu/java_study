@@ -1,0 +1,52 @@
+（１）3 << 2L - 1
+　「-」が先に処理されるので，3 << 1Lとなり，「11」->「110」となる．
+また「L」が含まれるため，long型となる．
+答え：6L
+
+（２）(3L << 2) - 1
+　カッコ内が優先される．他は（１）と同様．カッコ内で「11」->「1100」となる．
+1引くので「1001」
+答え：11L
+
+（３）10 < 12 == 6 >> 17
+　不等号が優先されるので，「true == false」となる．これは偽
+答え：false
+
+（４）10 << 12 == 6 >> 17
+　左辺は「1001000000000000」．右辺は「0」となる．よって偽
+答え：false
+
+（５）13.5e-1 % Float.POSITIVE_INFINITY
+　p177より割られる数がそのまま商となる．
+答え：13.5e-1
+
+（６）Float.POSITIVE_INFINITY + Double.NEGATIVE_INFINITY
+　float型とdouble型があるため，floatはdoubleにキャストされて計算される．
+Float.POSITIVE_INFINITY < Double.POSITIVE_INFINITYであるため，Doubleの負の値が大きい
+答え：Double.NEGATIVE_INFINITY
+
+（７）Double.POSITIVE_INFINITY - Float.NEGATIVE_INFINITY
+　-(-)=+となる．doubleにキャストされる．
+答え：Double.POSITIVE_INFINITY
+
+（８）0.0 / -0.0 == -0.0 / 0.0
+　±0.0/±0.0=NaNとなる．NaN == NaN = falseである．
+答え：false
+
+（９）Integer.MAX_VALUE + Integer.MIN_VALUE
+答え：0
+
+（１０）Long.MAX_VALUE + 5
+　最大値を超えるため不正
+
+（１１）(short)5 * (byte)10
+　計算時はintになる．結果は大きいサイズになる．
+答え：50(short型)
+
+（１２）(i < 15 ? 1.72e3f : 0)
+答え：i<15がtrueなら1.72e3f
+falseなら0
+
+（１３）i++ + i++ + --i
+　3+4+4
+答え：11
