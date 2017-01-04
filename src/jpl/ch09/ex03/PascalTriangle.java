@@ -40,7 +40,8 @@ public class PascalTriangle {
 
 	private void calcPascalTriangle(){
 		pascalsTriangle = new int[pascalnest][];
-		for(int i = 0;i< pascalsTriangle.length;i++){
+		int i = 0;
+		while(i< pascalsTriangle.length){
 			pascalsTriangle[i] = new int[i+1];
 			pascalsTriangle[i][0] = 1;
 			int j = 1;
@@ -51,15 +52,18 @@ public class PascalTriangle {
 				j++;
 			}
 			pascalsTriangle[i][pascalsTriangle[i].length-1] = 1;
+			i++;
 		}
 	}
 
 	public void triangleOutput(){
-		for(int i= 0; i< pascalsTriangle.length; i++){
+		int i = 0;
+		while(i< pascalsTriangle.length){
 			for(int j = 0; j < pascalsTriangle[i].length;j++){
 				System.out.print(pascalsTriangle[i][j]+" ");
 			}
 			System.out.println();
+			i++;
 		}
 	}
 
