@@ -18,35 +18,34 @@
 
 （５）13.5e-1 % Float.POSITIVE_INFINITY
 　p177より割られる数がそのまま商となる．
-答え：13.5e-1
+答え：1.35
 
 （６）Float.POSITIVE_INFINITY + Double.NEGATIVE_INFINITY
 　float型とdouble型があるため，floatはdoubleにキャストされて計算される．
 Float.POSITIVE_INFINITY < Double.POSITIVE_INFINITYであるため，Doubleの負の値が大きい
-答え：Double.NEGATIVE_INFINITY
+答え：Double.NEGATIVE_INFINITY　×NaNだった
 
 （７）Double.POSITIVE_INFINITY - Float.NEGATIVE_INFINITY
 　-(-)=+となる．doubleにキャストされる．
-答え：Double.POSITIVE_INFINITY
+答え：Double.POSITIVE_INFINITY　×Infinity
 
 （８）0.0 / -0.0 == -0.0 / 0.0
 　±0.0/±0.0=NaNとなる．NaN == NaN = falseである．
 答え：false
 
 （９）Integer.MAX_VALUE + Integer.MIN_VALUE
-答え：0
+答え：0　×-1
 
 （１０）Long.MAX_VALUE + 5
-　最大値を超えるため不正
+　最大値を超えるため不正　×-9223372036854775804
 
 （１１）(short)5 * (byte)10
 　計算時はintになる．結果は大きいサイズになる．
 答え：50(short型)
 
 （１２）(i < 15 ? 1.72e3f : 0)
-答え：i<15がtrueなら1.72e3f
-falseなら0
-
+答え：i<15がtrueなら1.72e3f　×1720.0
+falseなら0　×0.0
 （１３）i++ + i++ + --i
 　3+4+4
 答え：11
