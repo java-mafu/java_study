@@ -14,6 +14,9 @@ public class DigitalClock extends Window implements Runnable {
 
 	private static final int WINDOW_WIDTH = 80;
 	private static final int WINDOW_HEIGHT = 150;
+
+	static Thread th;
+	static DigitalClock tw;
 	int h;
 	int m;
 	int s;
@@ -80,7 +83,7 @@ public class DigitalClock extends Window implements Runnable {
     	buffer.translate(0,-cmenu.getWindowSizeY()/2);
     	g.drawImage(backgroundImage, 0, 0, this);
 	}
-	
+
 	private void drawClock(Graphics g) {
 
 		 g.setColor(cmenu.getFontColor());
@@ -96,8 +99,8 @@ public class DigitalClock extends Window implements Runnable {
 	}
 
 	public static void main(String[] args) {
-	Thread th;
-	DigitalClock tw = new DigitalClock();
+
+	tw = new DigitalClock();
 	th = new Thread(tw);
 	tw.init();
 	th.start();
