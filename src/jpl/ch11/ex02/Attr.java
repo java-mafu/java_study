@@ -1,13 +1,13 @@
-package jpl.ch03.ex07;
+package jpl.ch11.ex02;
 
-public class Attr {
+public class Attr<T> {
 	private final String name;
-	private Object value = null;
+	private T value = null;
 	public Attr(String name) {
 		this.name = name;
 	}
 
-	public Attr(String name, Object value) {
+	public Attr(String name, T value) {
 	this.name = name;
 	this.value = value;
 	}
@@ -15,12 +15,12 @@ public class Attr {
 	public String getName() {
 		return name;
 	}
-	public Object getValue() {
+	public T getValue() {
 		return value;
 	}
 
-	public Object setValue(Object newValue) {
-		Object oldVal = value;
+	public T setValue(T newValue) {
+		T oldVal = value;
 		value = newValue;
 		return oldVal;
 	}
