@@ -16,5 +16,4 @@ public class PunctuateNumberTest {
 		assertThat(PunctuateNumber.punctuateNumber(test, punc, digit), equalTo("123!4567!8909!8765!4321"));
 		assertThat(PunctuateNumber.punctuateNumber(test2, punc, digit), equalTo("Error"));
 	}
-
 }
