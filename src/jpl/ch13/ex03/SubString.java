@@ -1,10 +1,10 @@
 package jpl.ch13.ex03;
 
-import java.util.Vector;
+import java.util.ArrayList;;
 
 public class SubString {
 	public static String[] delimitedString(String from, char start, char end){
-		Vector<String> result = new Vector<String>();
+		ArrayList<String> result = new ArrayList<String>();
 		int startPos = from.indexOf(start);
 		int endPos;
 		while(startPos != -1){
