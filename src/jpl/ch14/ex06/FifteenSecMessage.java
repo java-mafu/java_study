@@ -1,5 +1,7 @@
 package jpl.ch14.ex06;
 
+
+/*7secの方法がわかりませんでした*/
 public class FifteenSecMessage extends Thread {
 	private int secondCount;
 	TimeDisplay td;
