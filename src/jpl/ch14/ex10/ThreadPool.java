@@ -102,20 +102,21 @@ public class ThreadPool {
 			throw new IllegalStateException();
 		else
 			isThreadStart = false;
-			notifyAll();
-
-			for(int i = 0; i < 10000; i++)
-				;
+		boolean isActiveThread;
+		do{
+			isActiveThread = false;
 		for(Thread th : threadList){
-			if(th.isAlive()){
+			notifyAll();
 				try {
-					th.join();
+					th.join(100);
 				} catch (InterruptedException e) {
 					// TODO 自動生成された catch ブロック
 					e.printStackTrace();
 				}
-			}
+				if(th.isAlive())
+					isActiveThread = true;
 		}
+		}while(isActiveThread);
 	}
 
 	/**
