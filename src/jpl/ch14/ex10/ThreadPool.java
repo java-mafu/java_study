@@ -3,8 +3,12 @@
  */
 package jpl.ch14.ex10;
 
+import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
+
+
+/**
+ * すいません，わかりません！*/
 
 /**
  * Simple Thread Pool class.
@@ -20,7 +24,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class ThreadPool {
 
-	int threadnumber;
+	int queueCapacity;
 	Queue<Runnable> taskQueue;
 	Thread threadList[];
 	boolean isThreadStart;
@@ -41,7 +45,7 @@ public class ThreadPool {
 	};
 
 	private synchronized Runnable remove() throws InterruptedException{
-		while(taskQueue.size() == 0){
+		while(taskQueue.isEmpty()){
 			wait();
 			if (!isThreadStart)
 				return null;
@@ -50,8 +54,13 @@ public class ThreadPool {
 	}
 
 	private synchronized void add(Runnable runnable){
-		taskQueue.add(runnable);
-		notifyAll();
+		while(true){
+			if(taskQueue.size() < queueCapacity){
+			taskQueue.add(runnable);
+			notifyAll();
+			break;
+			}
+		}
 	}
 
 	/**
@@ -68,7 +77,8 @@ public class ThreadPool {
 	public ThreadPool(int queueSize, int numberOfThreads) throws IllegalArgumentException {
 		if(queueSize <1 || numberOfThreads <1)
 			throw new IllegalArgumentException();
-		taskQueue = new LinkedBlockingQueue<Runnable>(queueSize);
+		queueCapacity = queueSize;
+		taskQueue = new LinkedList<>();
 		threadList = new Thread[numberOfThreads];
 		for(int i = 0;i < threadList.length; i++)
 			threadList[i] = new Thread(task);
@@ -97,7 +107,7 @@ public class ThreadPool {
 	 * @throws IllegalStateException
 	 *             if threads has not been started.
 	 */
-	public synchronized void stop() {
+	public void stop() {
 		if (!isThreadStart)
 			throw new IllegalStateException();
 		else
@@ -105,8 +115,12 @@ public class ThreadPool {
 		boolean isActiveThread;
 		do{
 			isActiveThread = false;
-		for(Thread th : threadList){
+
+			synchronized(this){
 			notifyAll();
+			}
+
+		for(Thread th : threadList){
 				try {
 					th.join(100);
 				} catch (InterruptedException e) {
@@ -137,6 +151,15 @@ public class ThreadPool {
 			throw new NullPointerException();
 		if (!isThreadStart)
 			throw new IllegalStateException();
-		add(runnable);
+		synchronized(this){
+			while(true){
+			if(taskQueue.size() < queueCapacity){
+			taskQueue.add(runnable);
+			notifyAll();
+			break;
+			}
+			notifyAll();
+		}
+		}
 	}
 }

@@ -15,4 +15,22 @@ public class PunctuateNumberTest {
 		assertThat(PunctuateNumber.punctuateNumber(test2), equalTo("Error"));
 	}
 
+	@Test
+	public void testPunctuateNumber2() {
+		String test = "123";
+		assertThat(PunctuateNumber.punctuateNumber(test), equalTo("123"));
+	}
+
+	@Test
+	public void testPunctuateNumber3() {
+		String test = "12";
+		assertThat(PunctuateNumber.punctuateNumber(test), equalTo("12"));
+	}
+
+	@Test
+	public void testPunctuateNumber4() {
+		String test = "";
+		assertThat(PunctuateNumber.punctuateNumber(test), equalTo(""));
+	}
+
 }

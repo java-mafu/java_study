@@ -36,7 +36,7 @@ public class MyMap {
 				break;
 				default:
 					arrayList.add("Error");
-
+					break;
 			}
 		}
 		return arrayList;
