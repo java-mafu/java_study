@@ -54,13 +54,16 @@ class CreateObject {
 	}
 
 	// 引数に渡されたパラメータをコンストラクタに渡してインスタンス生成
-	public <T> void newInstanceCreate(Object... args) throws InstantiationException, IllegalAccessException,
+	public void newInstanceCreate(Object... args) throws InstantiationException, IllegalAccessException,
 			NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
 
-		Class<?>[] parametersClass = new Class[args.length];
-		for (int i = 0; i < args.length; i++)
-			parametersClass[i] = args[i].getClass();
-		operatedObject = operatedClass.getConstructor(parametersClass).newInstance(args);
+		if (args != null) {
+			Class<?>[] parametersClass = new Class[args.length];
+			for (int i = 0; i < args.length; i++)
+				parametersClass[i] = args[i].getClass();
+			operatedObject = operatedClass.getConstructor(parametersClass).newInstance(args);
+		} else
+			operatedObject = operatedClass.newInstance();
 		fields = operatedObject.getClass().getFields();
 		methods = operatedObject.getClass().getMethods();
 	}

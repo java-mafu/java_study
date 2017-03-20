@@ -3,6 +3,8 @@ package interpret;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -11,27 +13,39 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
-public class ConstructorDialog extends JDialog {
+public class MethodDialog extends JDialog {
 
-	private JPanel contentPanel = new JPanel();
-	private Class<?>[] types;
-	private Object[] parameters;
-	private JTextField textField;
+	private final JPanel contentPanel = new JPanel();
+	private Object object;
+	private Method method;
+	JLabel label;
+	java.lang.reflect.Type[] types;
+
+	public Object[] getParameterValues() {
+		return parameterValues;
+	}
+
+
 	private JLabel[] parameterslabel;
 	private JTextField[] parametersTexts;
+	private Object[] parameterValues;
+	private Object returnValue;
 
-	JTextPane txtpnMessageBox;
 	private final Action action = new SwingAction();
+
+	public Object getReturnValue(){
+		return returnValue;
+	}
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ConstructorDialog dialog = new ConstructorDialog();
+			MethodDialog dialog = new MethodDialog();
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,32 +55,27 @@ public class ConstructorDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ConstructorDialog(Class<?>[] types) {
-		this.types = types;
+	public MethodDialog(Object object, Method method) {
+		this.object = object;
+		this.method = method;
 		setLayout();
 	}
 
-	public ConstructorDialog() {}
+	public MethodDialog() {
+		setLayout();
+	}
 
 	private void setLayout() {
-
-		contentPanel = new JPanel();
+		setBounds(100, 100, 450, 300);
 		setModal(true);
-		setBounds(100, 100, 450, 400);
 		getContentPane().setLayout(new BorderLayout());
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-
-		txtpnMessageBox = new JTextPane();
-		txtpnMessageBox.setText("message box");
-		txtpnMessageBox.setBounds(67, 267, 306, 25);
-		contentPanel.add(txtpnMessageBox);
-
+		types = method.getGenericParameterTypes();
 		parameterslabel = new JLabel[types.length];
 		parametersTexts = new JTextField[types.length];
-
+		parameterValues = new Object[types.length];
 		for (int i = 0; i < types.length; i++) {
 			JLabel plabel = new JLabel(CreateObject.erasePackageName(types[i].getTypeName()));
 			plabel.setBounds(40, 20 * (i * 2 + 1), 80, 25);
@@ -78,39 +87,24 @@ public class ConstructorDialog extends JDialog {
 			contentPanel.add(ptext);
 			parametersTexts[i] = ptext;
 		}
+
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.addActionListener(action);
+				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
+				okButton.addActionListener(action);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(action);
+				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
+				cancelButton.addActionListener(action);
 			}
 		}
-	}
-
-	public Object[] getParameters() {
-		return parameters;
-	}
-
-	private void castParameters() throws ClassCastException {
-		Object[] objs = new Object[types.length];
-
-		for (int i = 0; i < types.length; i++) {
-			System.out.println(types[i]);
-			System.out.println(parametersTexts[i].getText());
-			// Class c = types[i];
-			objs[i] = MyCastClass.castStringToAny(types[i], parametersTexts[i].getText());
-			if (objs[i] == null)
-				throw new ClassCastException();
-		}
-		parameters = objs;
 	}
 
 	private class SwingAction extends AbstractAction {
@@ -124,15 +118,32 @@ public class ConstructorDialog extends JDialog {
 
 			if (cmd.equals("OK")) {
 				try {
-					castParameters();
+					for (int i = 0; i < parameterValues.length; i++) {
+						parameterValues[i] = MyCastClass.castStringToAny((Class<?>)types[i],
+								parametersTexts[i].getText());
+					System.out.println(parameterValues[i].toString());
+					}
+					returnValue = method.invoke(object, parameterValues);
 					dispose();
 				} catch (ClassCastException e0) {
-					txtpnMessageBox.setText("パラメーターが不正またはnullです");
+					label.setText("パラメーターが不正またはnullです");
 
+				} catch (IllegalAccessException e1) {
+					// TODO 自動生成された catch ブロック
+					e1.printStackTrace();
+				} catch (IllegalArgumentException e1) {
+					// TODO 自動生成された catch ブロック
+					e1.printStackTrace();
+				} catch (InvocationTargetException e1) {
+					// TODO 自動生成された catch ブロック
+					e1.printStackTrace();
 				}
 			} else if (cmd.equals("Cancel")) {
-				dispose();
+				for (int i = 0; i < parameterValues.length; i++) {
+					parametersTexts[i].setText("");
+				}
 			}
 		}
 	}
+
 }
