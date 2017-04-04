@@ -4,9 +4,12 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.junit.Test;
 
@@ -15,7 +18,7 @@ public class AttrTest {
 	// currentPath
 	final static String currentPath = System.getProperty("user.dir") + "/test/"
 			+ AttrTest.class.getPackage().getName().replace(".", "/");
-	// 入出力のファイル名
+	// 蜈･蜃ｺ蜉帙�ｮ繝輔ぃ繧､繝ｫ蜷�
 	final static String inputFileName = "/input.txt";
 	final static String outputFileName = "/output.txt";
 
@@ -31,13 +34,12 @@ public class AttrTest {
 
 	@Test
 	public void DataOutputStreamAttrTest() throws IOException {
-		InputStream in = new FileInputStream(currentPath + inputFileName);
-		DataInputStream din = new DataInputStream(in);
 		Attr attr = new Attr("test", "hoge");
-		attr.writeData(currentPath + outputFileName);
-		din.close();
-		in = new FileInputStream(currentPath + outputFileName);
-		din = new DataInputStream(in);
+		OutputStream fout = new FileOutputStream(currentPath + outputFileName);
+		attr.writeData(fout);
+		fout.close();
+		InputStream in = new FileInputStream(currentPath + outputFileName);
+		DataInputStream din = new DataInputStream(in);
 		assertThat(din.readUTF(), equalTo("test='hoge'"));
 	}
 

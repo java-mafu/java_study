@@ -77,7 +77,6 @@ public class NameOpValueReader {
 		currentPath = System.getProperty("user.dir") + "/src/"
 				+ NameOpValueReader.class.getPackage().getName().replace(".", "/");
 			InputStreamReader in = new FileReader(currentPath + inputFileName);
-
 			NameOpValueReader.readValues(in);
 			System.out.println(NameOpValueReader.getValues());
 

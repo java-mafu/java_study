@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Attr {
 	private final String name;
@@ -21,8 +23,8 @@ public class Attr {
 
 	public Attr(DataInputStream in) throws IOException {
 		String str = in.readUTF();
-		this.name = str.substring(0, str.indexOf("='"));
-		this.value = str.substring(str.indexOf("='") + 1, str.indexOf("'"));
+		this.name = str.substring(0, str.indexOf("="));
+		this.value = str.substring(str.indexOf("'") + 1, str.lastIndexOf("'"));
 	}
 
 	public String getName() {
@@ -43,11 +45,10 @@ public class Attr {
 		return name + "='" + value + "'";
 	}
 
-	public void writeData(String file) throws IOException {
-		OutputStream fout = new FileOutputStream(file);
-		DataOutputStream out = new DataOutputStream(fout);
+	public void writeData(OutputStream fout) throws IOException {
+		DataOutputStream out; 
+		out = new DataOutputStream(fout);
 		out.writeUTF(this.toString());
-		out.close();
 	}
 
 }
