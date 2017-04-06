@@ -49,7 +49,7 @@ class CreateObject {
 	public <T> void newInstanceCreate() throws InstantiationException, IllegalAccessException, NoSuchMethodException,
 			SecurityException, IllegalArgumentException, InvocationTargetException {
 		operatedObject = operatedClass.newInstance();
-		fields = operatedObject.getClass().getFields();
+		fields = operatedObject.getClass().	getDeclaredFields();
 		methods = operatedObject.getClass().getMethods();
 	}
 
@@ -64,7 +64,7 @@ class CreateObject {
 			operatedObject = operatedClass.getConstructor(parametersClass).newInstance(args);
 		} else
 			operatedObject = operatedClass.newInstance();
-		fields = operatedObject.getClass().getFields();
+		fields = operatedObject.getClass().	getDeclaredFields();
 		methods = operatedObject.getClass().getMethods();
 	}
 

@@ -23,7 +23,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class InterpretSwing extends JFrame {
+public class Interpret extends JFrame {
 
 	CreateObject object;
 
@@ -58,7 +58,7 @@ public class InterpretSwing extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InterpretSwing frame = new InterpretSwing();
+					Interpret frame = new Interpret();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,7 +70,7 @@ public class InterpretSwing extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public InterpretSwing() {
+	public Interpret() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 790);
 		contentPane = new JPanel();
@@ -185,12 +185,17 @@ public class InterpretSwing extends JFrame {
 			fieldDialog.setVisible(true);
 			Field[] f = object.getFields();
 			try {
+				f[list.getSelectedIndex()].setAccessible(true);
 				f[list.getSelectedIndex()].set(object.getOperatedObject(), fieldDialog.getValue());
 				object.setFields(f);
+				lblText.setText("");
 			} catch (IllegalArgumentException e0) {
 				lblText.setText("値が不正です");
 			} catch (IllegalAccessException e1) {
-				lblText.setText("final値の対応はまだできていません");
+				lblText.setText("static final値には対応不可");
+			} catch (SecurityException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
 			}
 		}
 

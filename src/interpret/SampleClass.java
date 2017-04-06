@@ -2,8 +2,8 @@ package interpret;
 
 public class SampleClass {
 	public int a = 1;
-	public int b = 2;
-	public int c = 3;
+	private int b = 2;
+	private final int c = 3;
 
 	/*引数0 戻り値あり*/
 	public int getA(){
