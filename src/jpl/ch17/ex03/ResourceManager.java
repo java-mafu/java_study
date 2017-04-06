@@ -8,7 +8,7 @@ import java.util.Map;
 
 public final class ResourceManager {
 
-	Reference reference;
+	static Reference reference;
 	final ReferenceQueue<Object> queue;
 	final Thread reaper;
 	boolean shutdown = false;
@@ -51,7 +51,7 @@ public final class ResourceManager {
 
 		@Override
 		public void use(Object key, Object... args) {
-			if (System.identityHashCode(key) != keyHash)
+			if ()
 				throw new IllegalArgumentException("wrong key");
 
 			// リソース使用

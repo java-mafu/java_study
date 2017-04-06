@@ -6,9 +6,8 @@ package jpl.ch14.ex10;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
 /**
- * すいません，わかりません！*/
+ * 縺吶＞縺ｾ縺帙ｓ�ｼ後ｏ縺九ｊ縺ｾ縺帙ｓ�ｼ�*/
 
 /**
  * Simple Thread Pool class.
@@ -29,40 +28,6 @@ public class ThreadPool {
 	Thread threadList[];
 	boolean isThreadStart;
 
-	Runnable task = new Runnable() {
-		public void run() {
-			while (isThreadStart) {
-				try {
-					Runnable runner = remove();
-					if(runner != null)
-						runner.run();
-				} catch (InterruptedException e) {
-					// TODO 自動生成された catch ブロック
-					e.printStackTrace();
-				}
-			}
-		}
-	};
-
-	private synchronized Runnable remove() throws InterruptedException{
-		while(taskQueue.isEmpty()){
-			wait();
-			if (!isThreadStart)
-				return null;
-		}
-		return taskQueue.remove();
-	}
-
-	private synchronized void add(Runnable runnable){
-		while(true){
-			if(taskQueue.size() < queueCapacity){
-			taskQueue.add(runnable);
-			notifyAll();
-			break;
-			}
-		}
-	}
-
 	/**
 	 * Constructs ThreadPool.
 	 *
@@ -75,15 +40,58 @@ public class ThreadPool {
 	 *             if either queueSize or numberOfThreads is less than 1
 	 */
 	public ThreadPool(int queueSize, int numberOfThreads) throws IllegalArgumentException {
-		if(queueSize <1 || numberOfThreads <1)
+		if (queueSize < 1 || numberOfThreads < 1)
 			throw new IllegalArgumentException();
 		queueCapacity = queueSize;
-		taskQueue = new LinkedList<>();
+		taskQueue = new LinkedList<Runnable>();
 		threadList = new Thread[numberOfThreads];
-		for(int i = 0;i < threadList.length; i++)
+
+		Runnable task = new Runnable() {
+			public void run() {
+				while (isThreadStart) {
+					Runnable runner;
+					try {
+						runner = remove();
+						if (runner != null)
+							runner.run();
+					} catch (InterruptedException e) {
+						// TODO 自動生成された catch ブロック
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+
+		for (int i = 0; i < threadList.length; i++)
 			threadList[i] = new Thread(task);
 		isThreadStart = false;
 
+	}
+
+	private Runnable remove() throws InterruptedException {
+		synchronized (taskQueue) {
+			while (taskQueue.size() == 0) {
+				taskQueue.wait();
+				if (!isThreadStart)
+					return null;
+			}
+			taskQueue.notifyAll();
+			return taskQueue.remove();
+		}
+	}
+
+	private void add(Runnable runnable) {
+		synchronized (taskQueue) {
+			if (taskQueue.size() >= queueCapacity) {
+				try {
+					taskQueue.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			taskQueue.add(runnable);
+			taskQueue.notifyAll();
+		}
 	}
 
 	/**
@@ -94,10 +102,10 @@ public class ThreadPool {
 	 */
 	public void start() {
 		if (isThreadStart)
-			throw new IllegalArgumentException();
+			throw new IllegalStateException();
 		else
 			isThreadStart = true;
-		for(int i = 0;i < threadList.length; i++)
+		for (int i = 0; i < threadList.length; i++)
 			threadList[i].start();
 	}
 
@@ -113,24 +121,23 @@ public class ThreadPool {
 		else
 			isThreadStart = false;
 		boolean isActiveThread;
-		do{
+		do {
 			isActiveThread = false;
 
-			synchronized(this){
-			notifyAll();
+			synchronized (taskQueue) {
+				taskQueue.notifyAll();
 			}
 
-		for(Thread th : threadList){
+			for (Thread th : threadList) {
 				try {
 					th.join(100);
 				} catch (InterruptedException e) {
-					// TODO 自動生成された catch ブロック
 					e.printStackTrace();
 				}
-				if(th.isAlive())
+				if (th.isAlive())
 					isActiveThread = true;
-		}
-		}while(isActiveThread);
+			}
+		} while (isActiveThread);
 	}
 
 	/**
@@ -151,15 +158,6 @@ public class ThreadPool {
 			throw new NullPointerException();
 		if (!isThreadStart)
 			throw new IllegalStateException();
-		synchronized(this){
-			while(true){
-			if(taskQueue.size() < queueCapacity){
-			taskQueue.add(runnable);
-			notifyAll();
-			break;
-			}
-			notifyAll();
-		}
-		}
+		add(runnable);
 	}
 }
