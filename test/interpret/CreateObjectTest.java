@@ -40,10 +40,7 @@ public class CreateObjectTest {
 		}
 	}
 
-	@Test
-	public void testShowFieldsList() {
-		fail("まだ実装されていません");
-	}
+
 
 	@Test
 	public void testSetNewFieldValue() {
