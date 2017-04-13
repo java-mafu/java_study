@@ -3,7 +3,6 @@ package interpret;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.swing.AbstractAction;
@@ -27,7 +26,6 @@ public class MethodDialog extends JDialog {
 		return parameterValues;
 	}
 
-
 	private JLabel[] parameterslabel;
 	private JTextField[] parametersTexts;
 	private Object[] parameterValues;
@@ -35,7 +33,7 @@ public class MethodDialog extends JDialog {
 
 	private final Action action = new SwingAction();
 
-	public Object getReturnValue(){
+	public Object getReturnValue() {
 		return returnValue;
 	}
 
@@ -73,6 +71,9 @@ public class MethodDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		types = method.getGenericParameterTypes();
+		if (types.length == 0)
+			dispose();
+
 		parameterslabel = new JLabel[types.length];
 		parametersTexts = new JTextField[types.length];
 		parameterValues = new Object[types.length];
@@ -87,6 +88,10 @@ public class MethodDialog extends JDialog {
 			contentPanel.add(ptext);
 			parametersTexts[i] = ptext;
 		}
+
+		label = new JLabel("");
+		label.setBounds(180, 20 * (types.length * 2 + 1), 80, 25);
+		contentPanel.add(label);
 
 		{
 			JPanel buttonPane = new JPanel();
@@ -119,24 +124,14 @@ public class MethodDialog extends JDialog {
 			if (cmd.equals("OK")) {
 				try {
 					for (int i = 0; i < parameterValues.length; i++) {
-						parameterValues[i] = MyCastClass.castStringToAny((Class<?>)types[i],
+						parameterValues[i] = MyCastClass.castStringToAny((Class<?>) types[i],
 								parametersTexts[i].getText());
-					System.out.println(parameterValues[i].toString());
 					}
 					returnValue = method.invoke(object, parameterValues);
 					dispose();
-				} catch (ClassCastException e0) {
-					label.setText("パラメーターが不正またはnullです");
+				} catch (Exception e0) {
+					label.setText(e0.toString());
 
-				} catch (IllegalAccessException e1) {
-					// TODO 自動生成された catch ブロック
-					e1.printStackTrace();
-				} catch (IllegalArgumentException e1) {
-					// TODO 自動生成された catch ブロック
-					e1.printStackTrace();
-				} catch (InvocationTargetException e1) {
-					// TODO 自動生成された catch ブロック
-					e1.printStackTrace();
 				}
 			} else if (cmd.equals("Cancel")) {
 				for (int i = 0; i < parameterValues.length; i++) {
@@ -145,5 +140,4 @@ public class MethodDialog extends JDialog {
 			}
 		}
 	}
-
 }

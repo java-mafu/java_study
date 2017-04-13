@@ -103,8 +103,6 @@ public class ConstructorDialog extends JDialog {
 		Object[] objs = new Object[types.length];
 
 		for (int i = 0; i < types.length; i++) {
-			System.out.println(types[i]);
-			System.out.println(parametersTexts[i].getText());
 			// Class c = types[i];
 			objs[i] = MyCastClass.castStringToAny(types[i], parametersTexts[i].getText());
 			if (objs[i] == null)

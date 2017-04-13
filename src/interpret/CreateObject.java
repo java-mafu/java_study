@@ -8,8 +8,12 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 class CreateObject {
 
+	private JFrame frame;
 	private Class<?> operatedClass;
 	private Object operatedObject;
 	private Constructor[] constructors;
@@ -43,9 +47,11 @@ class CreateObject {
 	public CreateObject(String name) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		operatedClass = Class.forName(name);
 		constructors = operatedClass.getConstructors();
+		frame = new JFrame("Exception");
+		frame.setBounds(100, 100, 100, 200);
 	}
 
-	// 引数なしでインスタンス生成
+	// 蠑墓焚縺ｪ縺励〒繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓��
 	public <T> void newInstanceCreate() throws InstantiationException, IllegalAccessException, NoSuchMethodException,
 			SecurityException, IllegalArgumentException, InvocationTargetException {
 		operatedObject = operatedClass.newInstance();
@@ -53,17 +59,30 @@ class CreateObject {
 		methods = operatedObject.getClass().getMethods();
 	}
 
-	// 引数に渡されたパラメータをコンストラクタに渡してインスタンス生成
-	public void newInstanceCreate(Object... args) throws InstantiationException, IllegalAccessException,
-			NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
+	// 蠑墓焚縺ｫ貂｡縺輔ｌ縺溘ヱ繝ｩ繝｡繝ｼ繧ｿ繧偵さ繝ｳ繧ｹ繝医Λ繧ｯ繧ｿ縺ｫ貂｡縺励※繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓��
+	public void newInstanceCreate(Object... args) {
 
 		if (args != null) {
 			Class<?>[] parametersClass = new Class[args.length];
 			for (int i = 0; i < args.length; i++)
 				parametersClass[i] = args[i].getClass();
-			operatedObject = operatedClass.getConstructor(parametersClass).newInstance(args);
+			try{
+				operatedClass.getConstructor(parametersClass);
+				operatedObject = operatedClass.getConstructor(parametersClass).newInstance(args);
+			}catch(Exception e){
+				JOptionPane.showMessageDialog(frame, e.getCause().toString());
+				return;
+			}
 		} else
-			operatedObject = operatedClass.newInstance();
+			try {
+				operatedObject = operatedClass.newInstance();
+			} catch (InstantiationException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
 		fields = operatedObject.getClass().	getDeclaredFields();
 		methods = operatedObject.getClass().getMethods();
 	}
@@ -108,7 +127,7 @@ class CreateObject {
 			co.setNewFieldValue(co.fields[1], 5);
 			System.out.println(co.fields[1].get(co.getOperatedObject()));
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-			// TODO 自動生成された catch ブロック
+			// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�繧ｯ
 			e.printStackTrace();
 		}
 	}

@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class Interpret extends JFrame {
 	FieldDialog fieldDialog;
 	MethodDialog methodDialog;
 
-	// ３つのListで選択されているindex(constructor,field,methodの順番)
+	// �ｼ薙▽縺ｮList縺ｧ驕ｸ謚槭＆繧後※縺�繧喫ndex(constructor,field,method縺ｮ鬆�逡ｪ)
 	private int clickedList[];
 	private List<Class<?>[]> constructorType;
 	private List<Field> fieldList;
@@ -98,9 +97,9 @@ public class Interpret extends JFrame {
 		JLabel lblMethod = new JLabel("Method");
 		lblMethod.setBounds(413, 253, 73, 19);
 
-		lblText = new JLabel("text");
+		lblText = new JLabel("");
 		lblText.setFont(new Font("MS UI Gothic", Font.PLAIN, 30));
-		lblText.setBounds(105, 559, 429, 88);
+		lblText.setBounds(88, 631, 429, 88);
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(19, 275, 242, 179);
@@ -164,13 +163,8 @@ public class Interpret extends JFrame {
 					return;
 				}
 				createInstance();
-				try {
-					object.newInstanceCreate(constructorDialog.getParameters());
-				} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException
-						| IllegalArgumentException | InvocationTargetException e1) {
-					// TODO 自動生成された catch ブロック
-					e1.printStackTrace();
-				}
+
+				object.newInstanceCreate(constructorDialog.getParameters());
 				showClass();
 			} else if (cmd.equals("Field Edit")) {
 				editField();
@@ -190,11 +184,11 @@ public class Interpret extends JFrame {
 				object.setFields(f);
 				lblText.setText("");
 			} catch (IllegalArgumentException e0) {
-				lblText.setText("値が不正です");
+				lblText.setText("蛟､縺御ｸ肴ｭ｣縺ｧ縺�");
 			} catch (IllegalAccessException e1) {
-				lblText.setText("static final値には対応不可");
+				lblText.setText("static final蛟､縺ｫ縺ｯ蟇ｾ蠢應ｸ榊庄");
 			} catch (SecurityException e) {
-				// TODO 自動生成された catch ブロック
+				// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�繧ｯ
 				e.printStackTrace();
 			}
 		}
@@ -204,7 +198,7 @@ public class Interpret extends JFrame {
 			methodDialog = new MethodDialog(object.getOperatedObject(), methodList.get(list_1.getSelectedIndex()));
 			methodDialog.setVisible(true);
 			if (methodDialog.getReturnValue() != null)
-				lblText.setText("戻り値：" + methodDialog.getReturnValue().toString());
+				lblText.setText("return�ｼ�" + methodDialog.getReturnValue().toString());
 		}
 
 		private void reset() {
@@ -249,10 +243,10 @@ public class Interpret extends JFrame {
 				}
 
 			} catch (InstantiationException | IllegalAccessException e) {
-				// TODO 自動生成された catch ブロック
+				// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�繧ｯ
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO 自動生成された catch ブロック
+				// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�繧ｯ
 				lblText.setText("Class not found");
 			}
 
@@ -267,15 +261,14 @@ public class Interpret extends JFrame {
 		}
 
 		private void showClass() {
-			if (object == null)
+			if (object == null || object.getOperatedObject() == null)
 				return;
-			try {
-				object.newInstanceCreate();
-			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException
-					| IllegalArgumentException | InvocationTargetException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
+			// try {
+			// object.newInstanceCreate();
+			// } catch (Exception e) {
+			// // TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�繧ｯ
+			// e.printStackTrace();
+			// }
 			fieldlistmodel.clear();
 			methodlistmodel.clear();
 			String str = "Field:";

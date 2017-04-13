@@ -35,8 +35,8 @@ public class TypeDesc {
 		else
 			throw new Error("Unexpected non-class type");
 
-		/**追加*/
-		if(cls.equals(Object.class))
+		/** 追加 */
+		if (cls.equals(Object.class))
 			return;
 
 		for (int i = 0; i < depth; i++)
