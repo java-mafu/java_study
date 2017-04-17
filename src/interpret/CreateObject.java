@@ -15,6 +15,7 @@ class CreateObject {
 
 	private JFrame frame;
 	private Class<?> operatedClass;
+	private Class<?>[] types;
 	private Object operatedObject;
 	private Constructor[] constructors;
 	private Field[] fields;
@@ -26,6 +27,10 @@ class CreateObject {
 
 	public void setOperatedObject(Object operatedObject) {
 		this.operatedObject = operatedObject;
+	}
+
+	public void setTypes(Class<?>[] types){
+		this.types = types;
 	}
 
 	public Field[] getFields() {
@@ -63,12 +68,10 @@ class CreateObject {
 	public void newInstanceCreate(Object... args) {
 
 		if (args != null) {
-			Class<?>[] parametersClass = new Class[args.length];
-			for (int i = 0; i < args.length; i++)
-				parametersClass[i] = args[i].getClass();
+
 			try{
-				operatedClass.getConstructor(parametersClass);
-				operatedObject = operatedClass.getConstructor(parametersClass).newInstance(args);
+				operatedClass.getConstructor(types);
+				operatedObject = operatedClass.getConstructor(types).newInstance(args);
 			}catch(Exception e){
 				JOptionPane.showMessageDialog(frame, e.getCause().toString());
 				return;
@@ -106,12 +109,22 @@ class CreateObject {
 
 	public <T> void setNewFieldValue(Field field, T value) throws IllegalArgumentException, IllegalAccessException {
 		field.setAccessible(true);
-		field.set(operatedObject, value);
+		try{
+			field.set(operatedObject, value);
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(frame, e.getCause().toString());
+			return;
+		}
 	}
 
 	public Object callObjectMethod(Method method, Object... args)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		return method.invoke(operatedObject, args);
+		try{
+			return method.invoke(operatedObject, args);
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(frame, e.getCause().toString());
+			return null;
+		}
 	}
 
 	public static String erasePackageName(String str) {

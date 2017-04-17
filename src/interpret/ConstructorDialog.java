@@ -39,6 +39,12 @@ public class ConstructorDialog extends JDialog {
 	}
 
 	/**
+	 * typeはコンストラクタ作成で使用 */
+	public final Class<?>[] getTypes(){
+		return types;
+	}
+
+	/**
 	 * Create the dialog.
 	 */
 	public ConstructorDialog(Class<?>[] types) {

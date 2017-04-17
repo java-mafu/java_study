@@ -3,19 +3,23 @@ package interpret;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 public class MethodDialog extends JDialog {
 
+	JFrame frame;
 	private final JPanel contentPanel = new JPanel();
 	private Object object;
 	private Method method;
@@ -71,8 +75,15 @@ public class MethodDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		types = method.getGenericParameterTypes();
-		if (types.length == 0)
-			dispose();
+		label = new JLabel();
+		if (types.length == 0) {
+			try {
+				returnValue = method.invoke(object, null);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+		}
 
 		parameterslabel = new JLabel[types.length];
 		parametersTexts = new JTextField[types.length];
@@ -82,17 +93,13 @@ public class MethodDialog extends JDialog {
 			plabel.setBounds(40, 20 * (i * 2 + 1), 80, 25);
 			contentPanel.add(plabel);
 			parameterslabel[i] = plabel;
-
 			JTextField ptext = new JTextField();
 			ptext.setBounds(180, 20 * (i * 2 + 1), 200, 25);
 			contentPanel.add(ptext);
 			parametersTexts[i] = ptext;
 		}
-
-		label = new JLabel("");
-		label.setBounds(180, 20 * (types.length * 2 + 1), 80, 25);
-		contentPanel.add(label);
-
+		label.setBounds(180, 20 * (types.length * 2 + 1), 200, 25);
+		label.setText("プリミティブ型は値．それ以外はクラス名を入力してください");
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -110,6 +117,8 @@ public class MethodDialog extends JDialog {
 				cancelButton.addActionListener(action);
 			}
 		}
+		frame = new JFrame("Exception");
+		frame.setBounds(100, 100, 100, 200);
 	}
 
 	private class SwingAction extends AbstractAction {
@@ -124,20 +133,44 @@ public class MethodDialog extends JDialog {
 			if (cmd.equals("OK")) {
 				try {
 					for (int i = 0; i < parameterValues.length; i++) {
-						parameterValues[i] = MyCastClass.castStringToAny((Class<?>) types[i],
-								parametersTexts[i].getText());
+						if (isPrimitive(parameterslabel[i].getText())) {
+							parameterValues[i] = MyCastClass.castStringToAny((Class<?>) types[i],
+									parametersTexts[i].getText());
+						} else{
+							parameterValues[i] = Class.forName(parametersTexts[i].getText()).newInstance();
+						}
 					}
 					returnValue = method.invoke(object, parameterValues);
 					dispose();
 				} catch (Exception e0) {
-					label.setText(e0.toString());
+					JOptionPane.showMessageDialog(frame, e0.toString());
+					return;
 
 				}
 			} else if (cmd.equals("Cancel")) {
 				for (int i = 0; i < parameterValues.length; i++) {
-					parametersTexts[i].setText("");
+						parametersTexts[i].setText("");
+
 				}
 			}
 		}
 	}
+
+	private boolean isPrimitive(String className) {
+		switch (className) {
+		case "int":
+		case "long":
+		case "short":
+		case "byte":
+		case "boolean":
+		case "char":
+		case "float":
+		case "double":
+		case "String":
+			return true;
+		default:
+			return false;
+		}
+	}
+
 }

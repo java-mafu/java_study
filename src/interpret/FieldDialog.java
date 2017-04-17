@@ -12,12 +12,15 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 public class FieldDialog extends JDialog {
+
+	JFrame frame;
 
 	private final JPanel contentPanel = new JPanel();
 	private Field field;
@@ -125,6 +128,9 @@ public class FieldDialog extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+
+		frame = new JFrame("Exception");
+		frame.setBounds(100, 100, 100, 200);
 	}
 
 	public final Object getValue() {
@@ -145,12 +151,9 @@ public class FieldDialog extends JDialog {
 					value = MyCastClass.castStringToAny(field.getType(), textField.getText());
 					// field.set(obj, value);
 					dispose();
-				} catch (ClassCastException e0) {
-					label.setText("パラメーターが不正またはnullです");
-
-				} catch (IllegalArgumentException e1) {
-					// TODO 自動生成された catch ブロック
-					e1.printStackTrace();
+				} catch (Exception e0) {
+					JOptionPane.showMessageDialog(frame, e0.toString());
+					return;
 				}
 			} else if (cmd.equals("Cancel")) {
 				if (value != null)

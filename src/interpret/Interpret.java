@@ -70,6 +70,7 @@ public class Interpret extends JFrame {
 	 * Create the frame.
 	 */
 	public Interpret() {
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 790);
 		contentPane = new JPanel();
@@ -163,7 +164,7 @@ public class Interpret extends JFrame {
 					return;
 				}
 				createInstance();
-
+				object.setTypes(constructorType.get(list_2.getSelectedIndex()));
 				object.newInstanceCreate(constructorDialog.getParameters());
 				showClass();
 			} else if (cmd.equals("Field Edit")) {
@@ -184,11 +185,10 @@ public class Interpret extends JFrame {
 				object.setFields(f);
 				lblText.setText("");
 			} catch (IllegalArgumentException e0) {
-				lblText.setText("蛟､縺御ｸ肴ｭ｣縺ｧ縺�");
+				lblText.setText("引数が不正");
 			} catch (IllegalAccessException e1) {
-				lblText.setText("static final蛟､縺ｫ縺ｯ蟇ｾ蠢應ｸ榊庄");
+				lblText.setText("static finalには対応していない");
 			} catch (SecurityException e) {
-				// TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�繧ｯ
 				e.printStackTrace();
 			}
 		}
@@ -196,9 +196,10 @@ public class Interpret extends JFrame {
 		private void doMethod() {
 			System.out.println(list_1.getSelectedIndex());
 			methodDialog = new MethodDialog(object.getOperatedObject(), methodList.get(list_1.getSelectedIndex()));
-			methodDialog.setVisible(true);
+			if (methodList.get(list_1.getSelectedIndex()).getGenericParameterTypes().length != 0)
+				methodDialog.setVisible(true);
 			if (methodDialog.getReturnValue() != null)
-				lblText.setText("return�ｼ�" + methodDialog.getReturnValue().toString());
+				lblText.setText("return:" + methodDialog.getReturnValue().toString());
 		}
 
 		private void reset() {
@@ -263,12 +264,7 @@ public class Interpret extends JFrame {
 		private void showClass() {
 			if (object == null || object.getOperatedObject() == null)
 				return;
-			// try {
-			// object.newInstanceCreate();
-			// } catch (Exception e) {
-			// // TODO 閾ｪ蜍慕函謌舌＆繧後◆ catch 繝悶Ο繝�繧ｯ
-			// e.printStackTrace();
-			// }
+
 			fieldlistmodel.clear();
 			methodlistmodel.clear();
 			String str = "Field:";
