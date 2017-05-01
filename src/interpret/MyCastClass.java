@@ -1,6 +1,7 @@
 package interpret;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public class MyCastClass {
 
@@ -8,25 +9,41 @@ public class MyCastClass {
 		if (c.isInstance(input))
 			return c.cast(input);
 		else {
-			Object result;
-			try {
-				result = castPrimitive(c, input);
-			} catch (NumberFormatException e) {
-				return null;
-			}
-			if (result == null) {
-				if (c.isEnum())
-					result = castEnum(c, input);
-				else
-					try {
-						result = castClass(c, input);
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						// TODO 自動生成された catch ブロック
-						e.printStackTrace();
-					}
-			}
-			return result;
+			return getCastValue(c, input);
 		}
+	}
+
+	public static Object[] castStringToArray(Class<?> c, String input) {
+		ArrayList<Object> results = new ArrayList<Object>();
+		String castedStr = input.substring(input.indexOf("{") + 1);
+		int dotIndex;
+		while ((dotIndex = castedStr.indexOf(",")) != -1) {
+			String tempStr = castedStr.substring(0, dotIndex);
+			results.add(getCastValue(c, tempStr));
+			castedStr = castedStr.substring(dotIndex + 1);
+		}
+		return results.toArray();
+
+	}
+
+	private static Object getCastValue(Class<?> c, String input) {
+		Object result;
+		try {
+			result = castPrimitive(c, input);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+		if (result == null) {
+			if (c.isEnum())
+				result = castEnum(c, input);
+			else
+				try {
+					result = castClass(c, input);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
+		}
+		return result;
 	}
 
 	private static Object castPrimitive(Class<?> c, String input) throws NumberFormatException {
@@ -70,6 +87,5 @@ public class MyCastClass {
 		}
 		return null;
 	}
-
 
 }
