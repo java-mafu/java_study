@@ -16,7 +16,6 @@ public class AttributedObserverTest {
 		AttributedObserver ao = new AttributedObserver();
 		AttrObserver obs = new AttrObserver(ao);
 		ao.add(null);
-		Thread.sleep(100);
 		assertThat(obs.getState(), equalTo(State.ADDED));
 	}
 
