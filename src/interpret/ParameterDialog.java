@@ -16,13 +16,6 @@ public class ParameterDialog extends JDialog {
 	JTextField[] parameterTextField;
 	Object[] parameter;
 
-	public static void main(String[] args) {
-		Class<?>[] typess = { int.class, double.class, float.class, boolean.class, char.class };
-		ParameterDialog p = new ParameterDialog(typess);
-		p.setVisible(true);
-		for (Object o : p.getParameters())
-			System.out.println(o.toString());
-	}
 
 	public Object[] getParameters() {
 		return parameter;
