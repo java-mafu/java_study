@@ -40,7 +40,7 @@ public class MyCastClass {
 				try {
 					result = castClass(c, input);
 				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
+					result = null;
 				}
 		}
 		return result;

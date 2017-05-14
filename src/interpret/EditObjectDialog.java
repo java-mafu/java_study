@@ -42,6 +42,13 @@ public class EditObjectDialog extends JDialog {
 	JTextField methodReturn;
 	JButton methodSearchButton;
 
+	public final Object getObject() {
+		if (createdObject == null)
+			return null;
+
+		return createdObject.getObject();
+	}
+
 	private class ComponentParts {
 		JList list;
 		DefaultListModel initListModel;
@@ -260,15 +267,18 @@ public class EditObjectDialog extends JDialog {
 		public void valueChanged(ListSelectionEvent e) {
 			String obj;
 			try {
-				Class<?> fieldClass = createdObject.getFieldValue(fieldList.get(components[1].list.getSelectedIndex()))
-						.getClass();
-				if (fieldClass.isArray()) {
-					obj = returnArray(
-							createdObject.getFieldValue(fieldList.get(components[1].list.getSelectedIndex())));
-				} else
-					obj = createdObject.getFieldValue(fieldList.get(components[1].list.getSelectedIndex())).toString();
-				fieldValue.setText(obj);
-
+				Class<?> fieldClass;
+				if (createdObject.getFieldValue(fieldList.get(components[1].list.getSelectedIndex())) != null) {
+					fieldClass = createdObject.getFieldValue(fieldList.get(components[1].list.getSelectedIndex()))
+							.getClass();
+					if (fieldClass.isArray()) {
+						obj = returnArray(
+								createdObject.getFieldValue(fieldList.get(components[1].list.getSelectedIndex())));
+					} else
+						obj = createdObject.getFieldValue(fieldList.get(components[1].list.getSelectedIndex()))
+								.toString();
+					fieldValue.setText(obj);
+				}
 			} catch (IllegalArgumentException | IllegalAccessException e1) {
 				JOptionPane.showMessageDialog(exceptionFrame, "Cannot access Field");
 			}

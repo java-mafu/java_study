@@ -3,10 +3,13 @@ package interpret;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -22,14 +25,22 @@ public class ClassSearchFrame extends JFrame {
 	JList list;
 	DefaultListModel listmodel;
 	JTextField arrayNumText;
+	JTextField nameText;
 	JButton selectClassButton;
 	JFrame exceptionFrame;
 	List<Class<?>> classList;
 
-	//editClass
+	// インスタンス関係
+	JList insJList;
+	DefaultListModel insJListmodel;
+	JScrollPane insScrollPane;
+	static Map<String, JDialog> instances;
+	JButton editObjectButton;
+
+	// editClass
 	Class<?> editClass;
 
-	//ArrayDialog
+	// ArrayDialog
 	ArrayDialog arrayDialog;
 
 	public static void main(String[] args) {
@@ -40,7 +51,7 @@ public class ClassSearchFrame extends JFrame {
 	public ClassSearchFrame() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 300, 350);
+		setBounds(100, 100, 600, 350);
 		setLayout(null);
 		setTitle("Interpret");
 
@@ -55,8 +66,15 @@ public class ClassSearchFrame extends JFrame {
 		list = new JList(listmodel);
 		scrollPane = new JScrollPane(list);
 		arrayNumText = new JTextField("1");
+		nameText = new JTextField();
 		selectClassButton = new JButton("Create Object");
 		JLabel arrayInfo = new JLabel("Array Number");
+		JLabel nameInfo = new JLabel("Name");
+
+		insJListmodel = new DefaultListModel();
+		insJList = new JList(insJListmodel);
+		insScrollPane = new JScrollPane(insJList);
+		editObjectButton = new JButton("Edit Object");
 
 		// Layout
 		info.setBounds(10, 0, 265, 15);
@@ -65,8 +83,13 @@ public class ClassSearchFrame extends JFrame {
 		searchButton.setBounds(70, 70, 150, 20);
 		scrollPane.setBounds(10, 100, 265, 100);
 		arrayInfo.setBounds(10, 210, 80, 20);
-		arrayNumText.setBounds(50, 240, 40, 20);
-		selectClassButton.setBounds(100, 240, 150, 20);
+		nameInfo.setBounds(10, 240, 40, 20);
+		arrayNumText.setBounds(110, 210, 40, 20);
+		nameText.setBounds(50, 240, 100, 20);
+		selectClassButton.setBounds(70, 260, 150, 20);
+
+		insScrollPane.setBounds(300, 40, 265, 200);
+		editObjectButton.setBounds(300, 250, 265, 20);
 		// add
 		add(info);
 		add(addInfo);
@@ -75,11 +98,22 @@ public class ClassSearchFrame extends JFrame {
 		add(scrollPane);
 		add(arrayInfo);
 		add(arrayNumText);
+		add(nameText);
+		add(nameInfo);
 		add(selectClassButton);
+		add(editObjectButton);
+
+		JLabel ins = new JLabel("Created Objects");
+		ins.setBounds(300, 20, 265, 20);
+		add(ins);
+		add(insScrollPane);
 		// ButtonListener
 		ButtonListener bl = new ButtonListener();
 		searchButton.addActionListener(bl);
 		selectClassButton.addActionListener(bl);
+		editObjectButton.addActionListener(bl);
+
+		instances = new HashMap<String, JDialog>();
 	}
 
 	/** class search */
@@ -105,6 +139,19 @@ public class ClassSearchFrame extends JFrame {
 			}
 		}
 		return expectedClass;
+	}
+
+	public final JDialog getInstance(String key) {
+		return instances.get(key);
+	}
+
+	public boolean addInstance(String key, JDialog value) {
+		if (!instances.containsKey(key)) {
+			instances.put(key, value);
+			return true;
+		}
+		JOptionPane.showMessageDialog(exceptionFrame, "Instance名かぶり");
+		return false;
 	}
 
 	// Class search Button
@@ -133,25 +180,41 @@ public class ClassSearchFrame extends JFrame {
 				}
 				editClass = classList.get(selectedClassIndex);
 				try {
+
 					int objectNum = Integer.parseInt(arrayNumText.getText());
+					String objectName = nameText.getText();
 					if (objectNum <= 0) {
 						JOptionPane.showMessageDialog(exceptionFrame, "Please write Object number at least 1");
+					} else if (objectName.equals("")) {
+						JOptionPane.showMessageDialog(exceptionFrame, "Please write Object Name");
 					} else if (objectNum == 1) {
 						EditObjectDialog eod = new EditObjectDialog(editClass);
-						eod.setVisible(true);
+						if (addInstance(objectName, eod))
+							insJListmodel.addElement(objectName + "(" + editClass.getName() + ")");
+						// eod.setVisible(true);
 					} else {
-						arrayDialog = new ArrayDialog(objectNum);
+						arrayDialog = new ArrayDialog(objectNum, objectName);
 						for (int i = 0; i < objectNum; i++) {
 							EditObjectDialog eod = new EditObjectDialog(editClass, i);
 							arrayDialog.addButton(eod);
 						}
-						arrayDialog.setVisible(true);
+						if (addInstance(objectName, arrayDialog))
+							insJListmodel.addElement(objectName + "(" + editClass.getName() + "[])");
 					}
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(exceptionFrame, "Please write Object number");
+					JOptionPane.showMessageDialog(exceptionFrame, ex.toString());
 					return;
 				}
 
+			} else if (btnObj == editObjectButton) {
+				int selectedObjIndex;
+				if ((selectedObjIndex = list.getSelectedIndex()) == -1) {
+					JOptionPane.showMessageDialog(exceptionFrame, "Object not selected");
+					return;
+				}
+				JDialog eod = getInstance((insJList.getSelectedValue().toString().substring(0,
+						insJList.getSelectedValue().toString().indexOf("("))));
+				eod.setVisible(true);
 			}
 		};
 	}

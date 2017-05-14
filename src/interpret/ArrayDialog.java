@@ -16,33 +16,45 @@ import javax.swing.JScrollPane;
 public class ArrayDialog extends JDialog {
 
 	private int arraySum;
+	private String arrayName;
 	private JButton buttons[];
 	private List<JDialog> arrayDialogs;
 	private JPanel panel;
 	private JScrollPane scrollPane;
 
-	public ArrayDialog(int arraySum) {
+	public ArrayDialog(int arraySum, String name) {
 		setTitle("Choose Array Dialog");
 		this.arraySum = arraySum;
+		this.arrayName = name;
 		buttons = new JButton[arraySum];
 		arrayDialogs = new ArrayList<JDialog>();
 		panel = new JPanel();
 		panel.setLayout(new FlowLayout());
+		initLayout();
 	}
 
-	@Override
-	public void setVisible(boolean b) {
-		if (buttons != null)
-			initLayout();
-		super.setVisible(b);
+	public Object[] getArrayObject() {
+		if (arraySum <= 0)
+			return null;
+		Object[] objs = new Object[arraySum];
+		for (int i = 0; i < arraySum; i++) {
+			JDialog dialog = arrayDialogs.get(i);
+			objs[i] = ((EditObjectDialog) dialog).getObject();
+		}
+		return objs;
 	}
+
+	public Object getObject(int idx) {
+		return ((EditObjectDialog) arrayDialogs.get(idx)).getObject();
+	}
+
 
 	private void initLayout() {
 		setBounds(150, 150, 300, 100);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		addWindowListener(new ArrayDialogListener());
 		for (int i = 0; i < arraySum; i++) {
-			buttons[i] = new JButton("Array[" + i + "]");
+			buttons[i] = new JButton(arrayName + "[" + i + "]");
 			final int idx = i;
 			buttons[i].addActionListener(new ActionListener() {
 				@Override

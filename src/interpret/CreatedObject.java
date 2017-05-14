@@ -17,6 +17,10 @@ public class CreatedObject {
 
 	JFrame exceptionFrame;
 
+	public final Object getObject(){
+		return createdObject;
+	}
+
 	public CreatedObject(Class<?> c, Constructor con) {
 		editedClass = c;
 		constructor = con;
