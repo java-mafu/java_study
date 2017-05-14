@@ -14,7 +14,7 @@ public class DataHandler {
 		byte[] data;
 
 		// データを記憶しているか調べる
-		if (file.equals(lastFile)) {
+		if (file != null && file.equals(lastFile.get())) {
 			data = lastData.get();
 			if (data != null)
 				return data;
