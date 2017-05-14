@@ -6,8 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.Calendar;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class TimerPanel extends JPanel {
@@ -17,14 +15,17 @@ public class TimerPanel extends JPanel {
 	String minuteText;
 	String secondText;
 
-	public class FontData {
-		private static final String name = "Monospaced";
-		private static final int style = Font.BOLD;
-		private static final int size = 32;
+	public static class FontData {
+		private static String name = "Monospaced";
+		private static int style = Font.BOLD;
+		private static int size = 32;
 	}
 
-	Font largeFont = new Font(FontData.name, FontData.style, FontData.size);
-	Font smallFont = new Font(FontData.name, Font.BOLD, 16);
+	public void setFontData(String fontName, int style, int size) {
+		FontData.name = fontName;
+		FontData.style = style;
+		FontData.size = size;
+	}
 
 	public TimerPanel() {
 		super();
@@ -39,15 +40,22 @@ public class TimerPanel extends JPanel {
 			firstFrag = false;
 			new FontPixel(g);
 		}
+
+		Font largeFont = new Font(FontData.name, FontData.style, FontData.size);
+		Font smallFont = new Font(FontData.name, FontData.style, FontData.size / 2);
+
 		g.setColor(this.getBackground());
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.blue);
 		g.setFont(largeFont);
 		g.drawString(alignDigit(hourText), 10, getHeight() - 10);
-		g.drawString(":", 50, getHeight() - 10);
-		g.drawString(alignDigit(minuteText), 70, getHeight() - 10);
+		g.drawString(":", 10 + (int) FontPixel.getFontPixelSize(largeFont.getSize()).getWidth(), getHeight() - 10);
+		g.drawString(alignDigit(minuteText), 10 + (int) FontPixel.getFontPixelSize(largeFont.getSize()).getWidth() * 2,
+				getHeight() - 10);
 		g.setFont(smallFont);
-		g.drawString(alignDigit(secondText), 110, getHeight() - 10);
+		g.drawString(alignDigit(secondText), 10 + (int) FontPixel.getFontPixelSize(largeFont.getSize()).getWidth() * 2
+				+ + (int) FontPixel.getFontPixelSize(smallFont.getSize()).getWidth(),
+				getHeight() - 10);
 	}
 
 	private String alignDigit(String number) {
