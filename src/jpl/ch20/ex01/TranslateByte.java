@@ -28,7 +28,7 @@ public class TranslateByte {
 	public static void translateByte(InputStream input, OutputStream output, byte from, byte to) throws IOException {
 		int b;
 		while ((b = input.read()) != -1)
-			output.write(b == from ? to : b);
+			output.write((byte)b == from ? to : b);
 	}
 
 }
