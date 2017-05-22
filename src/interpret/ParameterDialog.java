@@ -86,6 +86,10 @@ public class ParameterDialog extends JDialog {
 			switch (btnstr) {
 			case "OK":
 				for (int i = 0; i < types.length; i++) {
+					if ("null" == parameterTextField[i].getText()) {
+						parameter[i] = null;
+						continue;
+					}
 					parameter[i] = MyCastClass.castStringToAny(types[i], parameterTextField[i].getText());
 					if (parameter[i] == null) {
 						JDialog dialog = ClassSearchFrame.instances.get(parameterTextField[i].getText());
@@ -101,7 +105,14 @@ public class ParameterDialog extends JDialog {
 								parameter[i] = ((EditObjectDialog) dialog).getObject();
 							} else {
 								String str = parameterTextField[i].getText();
-								String name = str.substring(0, str.indexOf("["));
+								int stridx = str.indexOf("[");
+								if(stridx == -1){
+									JFrame exceptionFrame = new JFrame("Exception");
+									JOptionPane.showMessageDialog(exceptionFrame, "引数がおかしいです");
+									dispose();
+									break;
+								}
+								String name = str.substring(0, stridx);
 								String idx = str.substring(str.indexOf("[") + 1, str.indexOf("]"));
 								dialog = ClassSearchFrame.instances.get(name);
 								try {
