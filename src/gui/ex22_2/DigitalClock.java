@@ -18,10 +18,12 @@ public class DigitalClock extends JFrame {
 
 	TimerPanel tp;
 	MenuDialog md;
+	Thread dialogThread;
 
 	public DigitalClock() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 200, 100);
+		//setResizable(false);
 		tp = new TimerPanel();
 		setLayout(new BorderLayout());
 		add(tp);
@@ -33,6 +35,26 @@ public class DigitalClock extends JFrame {
 		menubar.add(menu);
 		setJMenuBar(menubar);
 		menuItem.addActionListener(new MenuAction());
+
+		dialogThread = new Thread(new DialogRunnable());
+		dialogThread.start();
+	}
+
+	private class DialogRunnable implements Runnable {
+		@Override
+		public void run() {
+			while (true) {
+				tp.setData(md.getNewFont(), md.getFontColor(), md.getBackgroundColor());
+				try {
+					DigitalClock.this.setSize(
+							(int) FontPixel.getFontPixelSize(md.getNewFont().getSize() - 1).getWidth() * 10,
+							(int) FontPixel.getFontPixelSize(md.getNewFont().getSize() - 1).getHeight() + 50);
+				} catch (NullPointerException e) {
+					// 一回目はnull
+				}
+			}
+		}
+
 	}
 
 	/**

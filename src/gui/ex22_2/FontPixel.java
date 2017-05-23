@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 
 public class FontPixel {
 
-	private static final int MAX_FONT = 100;
+	public static final int MAX_FONT = 300;
 
 	private static Rectangle[] fontPixelSize;
 

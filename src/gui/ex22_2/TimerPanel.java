@@ -15,20 +15,21 @@ public class TimerPanel extends JPanel {
 	String minuteText;
 	String secondText;
 
-	public static class FontData {
-		private static String name = "Monospaced";
-		private static int style = Font.BOLD;
-		private static int size = 32;
-	}
+	Font font;
+	Color fontColor;
+	Color backgroundColor;
 
-	public void setFontData(String fontName, int style, int size) {
-		FontData.name = fontName;
-		FontData.style = style;
-		FontData.size = size;
+	public void setData(Font font, Color fontColor, Color backgroundColor) {
+		this.font = font;
+		this.fontColor = fontColor;
+		this.backgroundColor = backgroundColor;
 	}
 
 	public TimerPanel() {
 		super();
+		fontColor = Color.BLACK;
+		backgroundColor = Color.WHITE;
+		font = new Font("Monospaced", Font.BOLD, 32);
 		firstFrag = true;
 		this.setLayout(new FlowLayout());
 		th = new Thread(new Timer());
@@ -41,20 +42,16 @@ public class TimerPanel extends JPanel {
 			new FontPixel(g);
 		}
 
-		Font largeFont = new Font(FontData.name, FontData.style, FontData.size);
-		Font smallFont = new Font(FontData.name, FontData.style, FontData.size / 2);
-
-		g.setColor(this.getBackground());
+		g.setColor(backgroundColor);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.setColor(Color.blue);
-		g.setFont(largeFont);
+		g.setColor(fontColor);
+		g.setFont(font);
 		g.drawString(alignDigit(hourText), 10, getHeight() - 10);
-		g.drawString(":", 10 + (int) FontPixel.getFontPixelSize(largeFont.getSize()).getWidth(), getHeight() - 10);
-		g.drawString(alignDigit(minuteText), 10 + (int) FontPixel.getFontPixelSize(largeFont.getSize()).getWidth() * 2,
+		g.drawString(":", 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 2, getHeight() - 10);
+		g.drawString(alignDigit(minuteText), 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 3,
 				getHeight() - 10);
-		g.setFont(smallFont);
-		g.drawString(alignDigit(secondText), 10 + (int) FontPixel.getFontPixelSize(largeFont.getSize()).getWidth() * 2
-				+ + (int) FontPixel.getFontPixelSize(smallFont.getSize()).getWidth(),
+		g.drawString(":", 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 5, getHeight() - 10);
+		g.drawString(alignDigit(secondText), 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 6,
 				getHeight() - 10);
 	}
 
