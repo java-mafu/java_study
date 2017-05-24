@@ -3,15 +3,11 @@ package gui.ex23;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.PopupMenu;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.JWindow;
 
-public class DigitalClock extends JFrame {
+public class DigitalClock extends JWindow {
 
 	public static void main(String[] args) {
 		DigitalClock clock = new DigitalClock();
@@ -19,28 +15,25 @@ public class DigitalClock extends JFrame {
 	}
 
 	public TimerPanel tp;
-	MenuDialog md;
 	Thread dialogThread;
+
+	MouseResponse mouse;
+	PopupMenu pop;
+	ClockPopupMenu cmenu;
 
 	Font font;
 	Color fontColor;
 	Color backgroundColor;
 
 	public DigitalClock() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 171, 80);
-		setResizable(false);
+		setBounds(100, 100, 171, 30);
 		tp = new TimerPanel();
 		setLayout(new BorderLayout());
 		add(tp);
-		md = new MenuDialog();
-		JMenuBar menubar = new JMenuBar();
-		JMenu menu = new JMenu("Menu");
-		JMenuItem menuItem = new JMenuItem("Property");
-		menu.add(menuItem);
-		menubar.add(menu);
-		setJMenuBar(menubar);
-		menuItem.addActionListener(new MenuAction());
+		pop = new PopupMenu();
+	    add(pop);
+	    mouse = new MouseResponse(this, pop);
+	    cmenu = new ClockPopupMenu(this, pop);
 
 		dialogThread = new Thread(new DialogRunnable());
 		dialogThread.start();
@@ -49,21 +42,20 @@ public class DigitalClock extends JFrame {
 	private class DialogRunnable implements Runnable {
 		@Override
 		public void run() {
-			boolean initfrag = true;
 			while (true) {
-				font = md.getNewFont();
-				fontColor = md.getFontColor();
-				backgroundColor = md.getBackgroundColor();
+				font = cmenu.getPropertyFont();
+				fontColor = cmenu.getFontColor();
+				backgroundColor = cmenu.getBackgroundColor();
 				tp.setData(font, fontColor, backgroundColor);
 				try {
 					DigitalClock.this.setSize(
 							(int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 9,
-							(int) (FontPixel.getFontPixelSize(font.getSize() - 1).getHeight()*0.7) + 50);
+							(int) (FontPixel.getFontPixelSize(font.getSize() - 1).getHeight()*0.7));
 				} catch (NullPointerException e) {
 					// 一回目はnull
 				}
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					// TODO 自動生成された catch ブロック
 					e.printStackTrace();
@@ -71,21 +63,5 @@ public class DigitalClock extends JFrame {
 			}
 		}
 
-	}
-
-	/**
-	 * メニューのアクションがあるのであればこのクラスに追加する
-	 *
-	 * @author p000526831
-	 *
-	 */
-	class MenuAction implements ActionListener {
-		// メニューのイベント処理
-		public void actionPerformed(ActionEvent e) {
-
-			if (e.getActionCommand() == "Property") {
-				md.setVisible(true);
-			}
-		}
 	}
 }
