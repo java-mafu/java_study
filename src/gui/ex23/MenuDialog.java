@@ -1,4 +1,4 @@
-package gui.ex22_2;
+package gui.ex23;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -32,11 +32,11 @@ public class MenuDialog extends JDialog {
 		return font;
 	}
 
-	public Color getFontColor() {
+	public synchronized Color getFontColor() {
 		return fontColor;
 	}
 
-	public Color getBackgroundColor() {
+	public synchronized Color getBackgroundColor() {
 		return backgroundColor;
 	}
 

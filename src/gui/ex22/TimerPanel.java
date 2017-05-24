@@ -1,4 +1,4 @@
-package gui.ex22_2;
+package gui.ex22;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -46,13 +46,13 @@ public class TimerPanel extends JPanel {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(fontColor);
 		g.setFont(font);
-		g.drawString(alignDigit(hourText), 10, getHeight() - 10);
-		g.drawString(":", 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 2, getHeight() - 10);
+		g.drawString(alignDigit(hourText), 10, getHeight());
+		g.drawString(":", 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 2, getHeight());
 		g.drawString(alignDigit(minuteText), 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 3,
-				getHeight() - 10);
-		g.drawString(":", 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 5, getHeight() - 10);
+				getHeight());
+		g.drawString(":", 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 5, getHeight());
 		g.drawString(alignDigit(secondText), 10 + (int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 6,
-				getHeight() - 10);
+				getHeight());
 	}
 
 	private String alignDigit(String number) {

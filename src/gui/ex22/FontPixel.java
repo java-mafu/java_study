@@ -1,4 +1,4 @@
-package gui.ex22_2;
+package gui.ex22;
 
 import java.awt.Font;
 import java.awt.Graphics;

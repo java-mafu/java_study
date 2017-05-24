@@ -1,95 +1,91 @@
 package gui.ex22;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Calendar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
+public class DigitalClock extends JFrame {
 
-public class DigitalClock extends JFrame implements Runnable{
-
-	private static final int WINDOW_WIDTH = 80;
-	private static final int WINDOW_HEIGHT = 150;
-	static int h;
-	static int m;
-	static int s;
-	Dimension size;
-
-	boolean a = true;
-	//インスタンス化
-	static DigitalClock f = new DigitalClock();
-	static Property pro = new Property();
-	static Thread th = new Thread(f);
-	Calendar now = Calendar.getInstance();
-	//ダブルバッファリング用インスタンスをコンストラクタで作成
-	Image backgroundImage;
-	Graphics buffer;
-
-    public void run(){
-    	while(true){
-    		h = Calendar.getInstance().get(Calendar.HOUR_OF_DAY); //時を代入
-              m = Calendar.getInstance().get(Calendar.MINUTE);      //分を代入
-              s= Calendar.getInstance().get(Calendar.SECOND);       //秒を代入
-              repaint();
-
-    }
-    }
-
-    public void init(){
-
-    	size = getSize();
-    	backgroundImage = createImage(size.width, size.height);
-    	buffer = backgroundImage.getGraphics();
-    }
-
-    public void update(Graphics g){
-    	paint(g);
-    }
-    public void paint(Graphics g) {
-    	 f.setSize(pro.getWindowSizeX(), pro.getWindowSizeY());
-    	backgroundImage = createImage(pro.getWindowSizeX(), pro.getWindowSizeY());
-    	buffer = backgroundImage.getGraphics();
-    	buffer.setColor(pro.getBackgroundColor());
-        buffer.fillRect(0, 0, pro.getWindowSizeX(), pro.getWindowSizeY());
-        buffer.translate(0,pro.getWindowSizeY()/2);//(int)(WINDOW_WIDTH/2-MAGNI*60),(int)(WINDOW_HEIGHT/2-MAGNI*10));
-    	drawClock(buffer);
-    	buffer.translate(0,-pro.getWindowSizeY()/2);//)-(int)(WINDOW_WIDTH/2-MAGNI*60),-(int)(WINDOW_HEIGHT/2-MAGNI*10));
-    	g.drawImage(backgroundImage, 0, 0, this);
-
-    }
-	private void drawClock(Graphics g) {
-
-		 g.setColor(pro.getFontColor());
-		 drawFont(g);
-
-	}
-
-
-	private void drawFont(Graphics g){
-		Font font = pro.getPropertyFont();
-		g.setFont(font);
-		g.drawString(h+":"+m+":"+s, 30, 40);
-	}
-
-class MyWindowAdapter extends WindowAdapter {
-    public void windowClosing(WindowEvent e) {
-       System.exit(0);
-    }
-}
 	public static void main(String[] args) {
-		// 時計の表示
-	       f.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	       f.addWindowListener(f.new MyWindowAdapter());
-	       f.setVisible(true);
-	       f.init();
-	       pro.addMenuber(f);
-
-	       th.start();
+		DigitalClock clock = new DigitalClock();
+		clock.setVisible(true);
 	}
 
+	public TimerPanel tp;
+	MenuDialog md;
+	Thread dialogThread;
+
+	Font font;
+	Color fontColor;
+	Color backgroundColor;
+
+	public DigitalClock() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 171, 80);
+		setResizable(false);
+		tp = new TimerPanel();
+		setLayout(new BorderLayout());
+		add(tp);
+		md = new MenuDialog();
+		JMenuBar menubar = new JMenuBar();
+		JMenu menu = new JMenu("Menu");
+		JMenuItem menuItem = new JMenuItem("Property");
+		menu.add(menuItem);
+		menubar.add(menu);
+		setJMenuBar(menubar);
+		menuItem.addActionListener(new MenuAction());
+
+		dialogThread = new Thread(new DialogRunnable());
+		dialogThread.start();
+	}
+
+	private class DialogRunnable implements Runnable {
+		@Override
+		public void run() {
+			boolean initfrag = true;
+			while (true) {
+				font = md.getNewFont();
+				fontColor = md.getFontColor();
+				backgroundColor = md.getBackgroundColor();
+				tp.setData(font, fontColor, backgroundColor);
+				try {
+					DigitalClock.this.setSize(
+							(int) FontPixel.getFontPixelSize(font.getSize() - 1).getWidth() * 9,
+							(int) (FontPixel.getFontPixelSize(font.getSize() - 1).getHeight()*0.7) + 50);
+				} catch (NullPointerException e) {
+					// 一回目はnull
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO 自動生成された catch ブロック
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * メニューのアクションがあるのであればこのクラスに追加する
+	 *
+	 * @author p000526831
+	 *
+	 */
+	class MenuAction implements ActionListener {
+		// メニューのイベント処理
+		public void actionPerformed(ActionEvent e) {
+
+			if (e.getActionCommand() == "Property") {
+				md.setVisible(true);
+			}
+		}
+	}
 }
