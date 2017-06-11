@@ -37,8 +37,8 @@ public class DecryEncryptStreamTest {
 		in = new FileInputStream(currentPath + "/" + inputFileName);
 		InputStream in2 = new FileInputStream(currentPath + "/" + outputFileName);
 		InputStream result = new DecryptInputStream(in2);
-		while ((b = in.read()) != -1 &&(b2 = in2.read()) != -1) {
-			assertThat(b, equalTo(b));
+		while ((b = in.read()) != -1 &&(b2 = result.read()) != -1) {
+			assertThat(b, equalTo(b2));
 		}
 
 		in.close();
