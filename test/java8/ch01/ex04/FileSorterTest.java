@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class FileSorterTest {
 
-	String[] answerFileList = { "a", "b", "c", "a.txt", "b.txt", "c.txt", "FileSorterTest.java" };
+	String[] answerFileList = { "a", "b", "c", "FileSorterTest.java", "a.txt", "b.txt", "c.txt" };
 	String foldername = "test/java8/ch01/ex04";
 
 	@Test
