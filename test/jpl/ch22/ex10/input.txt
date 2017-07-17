@@ -1,0 +1,6 @@
+#comment ignore
+test
+#comment ignore
+hoge
+fuga
+#hogehoge
