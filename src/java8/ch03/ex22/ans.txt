@@ -1,0 +1,5 @@
+Q:CompletableFutureに対するflatMap操作は存在するか?存在するとしたら、それは何か?
+
+A:<U> CompletableFuture<U> thenCompose(Function<? super T,? extends CompletionStage<U>> fn)
+このステージが正常に完了したときに、このステージを指定された関数への引数に設定して実行される新しいCompletionStageを返します。
+CompletionStageの実装がCompletableFutureとなるため、おそらくこのメソッドがflatMapに対応する。
