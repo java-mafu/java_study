@@ -7,6 +7,7 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.LineChart.SortingPolicy;
 
+// ChartのPropertyの使い方がわからない
 public class Greeting {
 	@SuppressWarnings("rawtypes")
 	private LineChart chart;
