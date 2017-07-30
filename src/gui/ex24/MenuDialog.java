@@ -2,7 +2,6 @@ package gui.ex24;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
@@ -74,7 +73,7 @@ public class MenuDialog extends JDialog {
 
 		fontColors = new int[3];
 		backgroundColors = new int[3];
-		setBounds(100, 100, 400, 200);
+		setBounds(100, 100, 600, 300);
 		fontColorField = new JTextField[3];
 		backgroundColorField = new JTextField[3];
 		ActionListener tfa = new ComponentActionListener();
@@ -82,10 +81,10 @@ public class MenuDialog extends JDialog {
 			fontColors[i] = 0;
 			backgroundColors[i] = 255;
 			fontColorField[i] = new JTextField("0");
-			fontColorField[i].setPreferredSize(new Dimension(50, 20));
+			fontColorField[i].setColumns(4);
 			fontColorField[i].addActionListener(tfa);
 			backgroundColorField[i] = new JTextField("255");
-			backgroundColorField[i].setPreferredSize(new Dimension(50, 20));
+			backgroundColorField[i].setColumns(4);
 			backgroundColorField[i].addActionListener(tfa);
 		}
 		fontColor = new Color(0, 0, 0);
@@ -116,6 +115,17 @@ public class MenuDialog extends JDialog {
 		for (int i = 0; i < colorField.length - 1; i++)
 			colorField[i] = colorFieldAll[i * 2].getName();
 		colorField[colorField.length - 1] = "";
+		String fontName = fontList.getSelectedItem().toString();
+		int fontSize = fontSizeList.getSelectedIndex() + 1;
+		synchronized (font) {
+			font = new Font(fontName, Font.BOLD, fontSize);
+		}
+		synchronized (fontColor) {
+			fontColor = new Color(fontColors[0], fontColors[1], fontColors[2]);
+		}
+		synchronized (backgroundColor) {
+			backgroundColor = new Color(backgroundColors[0], backgroundColors[1], backgroundColors[2]);
+		}
 
 		setLayoutComponent(gbl, 0, 0, 1, 1, new JLabel("Font", SwingConstants.RIGHT));
 		setLayoutComponent(gbl, 1, 0, 7, 1, fontList);
@@ -181,6 +191,16 @@ public class MenuDialog extends JDialog {
 			} else if (e.getSource().equals(previewButton)) {
 
 			} else if (e.getSource().equals(cancelButton)) {
+				fontList.setSelectedItem(font.getFontName());
+				fontSizeList.setSelectedIndex(font.getSize() - 1);
+				fontColorField[0].setText(Integer.toString(fontColor.getRed()));
+				fontColorField[1].setText(Integer.toString(fontColor.getGreen()));
+				fontColorField[2].setText(Integer.toString(fontColor.getBlue()));
+				backgroundColorField[0].setText(Integer.toString(backgroundColor.getRed()));
+				backgroundColorField[1].setText(Integer.toString(backgroundColor.getGreen()));
+				backgroundColorField[2].setText(Integer.toString(backgroundColor.getBlue()));
+				fontColorPanel.setBackground(fontColor);
+				backgroundColorPanel.setBackground(backgroundColor);
 
 			} else {
 				System.out.println("未対応のボタン");
