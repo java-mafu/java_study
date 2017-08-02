@@ -5,6 +5,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -13,10 +17,13 @@ import javax.swing.JMenuItem;
 
 public class DigitalClock extends JFrame {
 
+	static DigitalClock clock;
+
 	public static void main(String[] args) {
-		DigitalClock clock = new DigitalClock();
+		clock = new DigitalClock();
 		clock.setVisible(true);
 	}
+
 
 	public TimerPanel tp;
 	MenuDialog md;
@@ -26,9 +33,14 @@ public class DigitalClock extends JFrame {
 	Color fontColor;
 	Color backgroundColor;
 
+
+	private Preferences prefs;
+    private static final String KEY_BY_FT[] = {"point_x_Do_or_Die", "point_y_Do_or_Die"};
+
 	public DigitalClock() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 171, 80);
+		prefs = Preferences.userNodeForPackage(this.getClass());
+		addWindowListener(new MyWindowAdapter());
+		setBounds(prefs.getInt(KEY_BY_FT[0], 100), prefs.getInt(KEY_BY_FT[1], 100), 171, 80);
 		setResizable(false);
 		tp = new TimerPanel();
 		setLayout(new BorderLayout());
@@ -49,7 +61,6 @@ public class DigitalClock extends JFrame {
 	private class DialogRunnable implements Runnable {
 		@Override
 		public void run() {
-			boolean initfrag = true;
 			while (true) {
 				font = md.getNewFont();
 				fontColor = md.getFontColor();
@@ -63,7 +74,7 @@ public class DigitalClock extends JFrame {
 					// 一回目はnull
 				}
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO 自動生成された catch ブロック
 					e.printStackTrace();
@@ -71,6 +82,20 @@ public class DigitalClock extends JFrame {
 			}
 		}
 
+	}
+
+
+	class MyWindowAdapter extends WindowAdapter {
+	    public void windowClosing(WindowEvent e) {
+	    	 try {
+	    	prefs.putInt(KEY_BY_FT[0], clock.getLocationOnScreen().x);
+	    	prefs.putInt(KEY_BY_FT[1], clock.getLocationOnScreen().y);
+	    	prefs.flush();
+	    	 } catch (BackingStoreException ex) {
+	             ex.printStackTrace();
+	         }
+	    	System.exit(0);
+	    }
 	}
 
 	/**
