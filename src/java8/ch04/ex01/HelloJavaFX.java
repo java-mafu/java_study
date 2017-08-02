@@ -1,8 +1,6 @@
 package java8.ch04.ex01;
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -12,21 +10,6 @@ import javafx.stage.Stage;
 
 public class HelloJavaFX extends Application {
 
-	public class Greeting {
-		private StringProperty text = new SimpleStringProperty("");
-
-		public final StringProperty textProperty() {
-			return text;
-		}
-
-		public final void setText(String newValue) {
-			text.set(newValue);
-		}
-
-		public final String getText() {
-			return text.get();
-		}
-	}
 
 	@Override
 	public void start(Stage stage) throws Exception {
